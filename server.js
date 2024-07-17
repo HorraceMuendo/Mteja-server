@@ -9,7 +9,6 @@ app.use(cors())
 app.use(express.json())
 
 
-
 //calling the routes
 app.use('/users', userRouter)
 
