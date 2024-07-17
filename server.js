@@ -1,5 +1,5 @@
 const express = require ('express');
-const db = require('./db/dbConfig')
+const userRouter = require('./routes/user')
 const app = express();
 const cors = require('cors');
 const port = 6969;
@@ -9,10 +9,13 @@ app.use(cors())
 app.use(express.json())
 
 
+
 //calling the routes
-const userRouter = require('./routes/user')
 app.use('/users', userRouter)
 
 app.listen(port, () => {
     console.log("Listening.....")
 })
+
+
+

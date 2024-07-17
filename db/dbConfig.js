@@ -5,8 +5,17 @@ const pool = new Pool({
     user: "postgres",
     password: "",
     database: "clubnexa",
-    port: 5423
+    port: 5432
 });
+
+pool.connect((err) => {
+    if (err) {
+      console.error('Error connecting to the database:', err);
+    } else {
+      console.log('Connected to the database');
+    }
+  });
+
 
 module.exports = (
     pool
