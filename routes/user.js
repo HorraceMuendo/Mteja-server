@@ -5,7 +5,7 @@ const db = require('../db/dbConfig');
 
 // Number of salt rounds for bcrypt
 const saltRounds = 10;
-
+// post req for signup
 router.post('/signup', (req, res) => {
   const { firstname, lastname, email, password } = req.body;
 
@@ -29,5 +29,36 @@ router.post('/signup', (req, res) => {
     });
   });
 });
+
+//post req for login
+router.post("/login", (req, res) => {
+  const { email, password } = req.body
+  const sql = 'SELECT * FROM signup WHERE email=$1'
+  const values =[email]
+
+  db.query(sql, values,(err, data)=> {
+    if(err) {
+      console.error("Database error", err)
+      return res.status(500).json({error:'internal server error please try again'})
+    }
+    if (data.rows.length === 0) {
+      return res.status(401).json({error:'Invalid email or password'})
+    }
+    const user = data.rows[0]
+    //comparison
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (err) {
+        console.error("Error comparing passwords: ", err);
+        return res.status(500).json({error:'internal server error. Please try again later'})
+      }
+      if (result) {
+        res.status(200).json({message:'Login succesful',user})
+      } else {
+        res.status(401).json({ error: 'Invalid email or password.' });
+      }
+    })
+  })
+})
+
 
 module.exports = router;
