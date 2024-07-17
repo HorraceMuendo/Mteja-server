@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../db/dbConfig');
 
 router.post("/signup", (req, res) => {
-const sql = 'INSERT INTO users (firstname, lastname, email, password) VALUES ($1, $2, $3, $4)';
+const sql = 'INSERT INTO signup (firstname, lastname, email, password) VALUES ($1, $2, $3, $4)';
 const values = [
     req.body.firstname,
     req.body.lastname,
