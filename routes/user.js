@@ -60,5 +60,24 @@ router.post("/login", (req, res) => {
   })
 })
 
+// Update User Profile
+router.put('/update-profile', async (req, res) => {
+  try {
+    const { userId, ...updateData } = req.body;
 
-module.exports = router;
+    // Find user by ID and update
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+ module.exports = router
