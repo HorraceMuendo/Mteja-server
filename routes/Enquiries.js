@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const db = express('../db/dbConfigure');
+const db = require('../db/dbConfig');
 
-router.get('/list', (res,req)=>{
+router.get('/list', (req,res)=>{
     const sql = 'SELECT * from enquirires'
 
     db.query(sql, (err,result)=>{

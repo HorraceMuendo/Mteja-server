@@ -1,4 +1,10 @@
-router.get('/list', (res,req)=>{
+const express = require('express');
+const router = express.Router();
+const db = require('../db/dbConfig');
+
+
+
+router.get('/complains/list', (req,res)=>{
     const sql = 'SELECT * from complain'
 
     db.query(sql, (err,result)=>{
@@ -11,7 +17,7 @@ router.get('/list', (res,req)=>{
 
 })
 
-router.post('/add', (req, res) => {
+router.post('/complains/add', (req, res) => {
     const { name, price, category } = req.body; // Use object destructuring
 
     const sql = 'INSERT INTO complain (name, email, productcategory) VALUES ($1, $2, $3)';
@@ -31,7 +37,7 @@ router.post('/add', (req, res) => {
 
 //compliments section
 
-router.get('/list', (res,req)=>{
+router.get('/compliments/list', (req,res)=>{
     const sql = 'SELECT * from compliment'
 
     db.query(sql, (err,result)=>{
@@ -40,15 +46,15 @@ router.get('/list', (res,req)=>{
             return res.status(500).json({error: 'Internal server error plaease try again later  '})
         }
         res.json(result.rows)
-    })
+    });
 
-})
+});
 
-router.post('/add', (req, res) => {
-    const { name, price, category } = req.body; // Use object destructuring
+router.post('/compliments/add', (req, res) => {
+    const { name, email, compliment } = req.body; // Use object destructuring
 
-    const sql = 'INSERT INTO compliment (name, email, productcategory) VALUES ($1, $2, $3)';
-    const values = [name, price, category];
+    const sql = 'INSERT INTO compliment (name, email, compliment) VALUES ($1, $2, $3)';
+    const values = [name, email, compliment];
 
     // Adding the products to db
     db.query(sql, values, (err, data) => {
