@@ -18,10 +18,10 @@ router.get('/complains/list', (req,res)=>{
 })
 
 router.post('/complains/add', (req, res) => {
-    const { name, price, category } = req.body; // Use object destructuring
+    const { name, email, complain } = req.body; // Use object destructuring
 
-    const sql = 'INSERT INTO complain (name, email, productcategory) VALUES ($1, $2, $3)';
-    const values = [name, price, category];
+    const sql = 'INSERT INTO complain (name, email, complain) VALUES ($1, $2, $3)';
+    const values = [name, email, complain];
 
     // Adding the products to db
     db.query(sql, values, (err, data) => {
@@ -29,7 +29,7 @@ router.post('/complains/add', (req, res) => {
           console.error('Database error:', err);
           return res.status(500).json({ error: 'Internal server error. Please try again later.' });
         } else {
-          res.status(201).json({ message: 'Product successfully added', data });
+          res.status(201).json({ message: 'Complain successfully sent', data });
         }
     });
 });

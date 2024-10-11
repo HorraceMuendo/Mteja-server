@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../db/dbConfig');
 
 router.get('/list', (req,res)=>{
-    const sql = 'SELECT * from enquirires'
+    const sql = 'SELECT * from enquiries'
 
     db.query(sql, (err,result)=>{
         if (err) {
@@ -16,10 +16,10 @@ router.get('/list', (req,res)=>{
 })
 
 router.post('/add', (req, res) => {
-    const { name, price, category } = req.body; // Use object destructuring
+    const { name, email, productdetails } = req.body; // Use object destructuring
 
-    const sql = 'INSERT INTO enquiries (name, email, productcategory) VALUES ($1, $2, $3)';
-    const values = [name, price, category];
+    const sql = 'INSERT INTO enquiries (name, email, productdetails) VALUES ($1, $2, $3)';
+    const values = [name, email, productdetails];
 
     // Adding the products to db
     db.query(sql, values, (err, data) => {

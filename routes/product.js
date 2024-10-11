@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require('../db/dbConfig');
 
 
-
 //get all products
 router.get('/list', (req, res) => {
     const sql = 'SELECT * FROM products';
