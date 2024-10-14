@@ -3,6 +3,8 @@ const userRouter = require('./routes/user')
 const productsRouter = require ('./routes/product')
 const enquiriesRouter = require ('./routes/Enquiries')
 const customerRouter = require ('./routes/customer')
+const contactRouter = require ('./routes/contact')
+const employeeRouter = require ('./routes/employee')
 
 const app = express();
 const cors = require('cors');
@@ -18,6 +20,8 @@ app.use('/users', userRouter)
 app.use('/products',productsRouter)
 app.use('/customers', customerRouter)
 app.use('/enquiries',enquiriesRouter)
+app.use('/contact', contactRouter)
+app.use('/employee',employeeRouter)
 
 
 
