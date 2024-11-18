@@ -12,7 +12,7 @@ const cors = require('cors');
 const port = 6969;
 
 app.use(cors())
-//convert html to css
+//convert html to json
 app.use(express.json())
 
 
