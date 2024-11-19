@@ -1,41 +1,13 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const express = require('express');
+const router = express.Router();
+const db = require('../db/dbConfig');
 
-const app = express();
-const PORT = 5000;
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
 
-// MongoDB Connection
-mongoose.connect("mongodb://localhost:27017/salesDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-mongoose.connection.on("connected", () => {
-  console.log("Connected to MongoDB");
-});
-
-// Lead Schema
-const leadSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  phone: String,
-  status: { type: String, default: "New" },
-  value: Number,
-  createdAt: { type: Date, default: Date.now },
-});
-
-const Lead = mongoose.model("Lead", leadSchema);
-
-// Routes
 
 // Get all leads
-app.get("/api/leads", async (req, res) => {
+app.get("/leads", async (req, res) => {
   try {
     const leads = await Lead.find();
     res.json(leads);
@@ -45,7 +17,7 @@ app.get("/api/leads", async (req, res) => {
 });
 
 // Add a new lead
-app.post("/api/leads", async (req, res) => {
+app.post("/leads", async (req, res) => {
   const { name, email, phone, status, value } = req.body;
   const newLead = new Lead({ name, email, phone, status, value });
   try {
@@ -57,7 +29,7 @@ app.post("/api/leads", async (req, res) => {
 });
 
 // Update lead status
-app.put("/api/leads/:id", async (req, res) => {
+app.put("/leads/:id", async (req, res) => {
   const { status } = req.body;
   try {
     const updatedLead = await Lead.findByIdAndUpdate(
@@ -72,7 +44,7 @@ app.put("/api/leads/:id", async (req, res) => {
 });
 
 // Delete a lead
-app.delete("/api/leads/:id", async (req, res) => {
+app.delete("/leads/:id", async (req, res) => {
   try {
     await Lead.findByIdAndDelete(req.params.id);
     res.status(204).send();
@@ -95,6 +67,4 @@ app.get("/api/sales/performance", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+
