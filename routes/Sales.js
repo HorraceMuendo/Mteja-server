@@ -75,7 +75,7 @@ router.post("/leads", async (req, res) => {
 
 
 
-router.post("/leads", async (req, res) => {
+router.post("/add", async (req, res) => {
   const { date, amount, category } = req.body;
 
   const sql = 'INSERT INTO sales (date, amount, category) VALUES ($1, $2, $3)';
@@ -95,7 +95,7 @@ router.post("/leads", async (req, res) => {
 
 
 // GET route to fetch all sales data
-router.get("/leads", async (req, res) => {
+router.get("/list", async (req, res) => {
   const sql = 'SELECT * from sales'
 
   db.query(sql, (err,result)=>{
@@ -115,7 +115,7 @@ router.get("/leads", async (req, res) => {
 
 router.get("/performance", async (req, res) => {
   try {
-    const { rows } = await db.query('SELECT * FROM contact');
+    const { rows } = await db.query('SELECT * FROM leads');
 
     const totalLeads = rows.length;
     const closedWon = rows.filter((lead) => lead.status === 'Closed Won').length;
