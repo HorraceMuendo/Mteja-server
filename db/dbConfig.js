@@ -16,7 +16,6 @@ pool.connect((err) => {
     }
   });
 
-
 module.exports = (
     pool
 )
