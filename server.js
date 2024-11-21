@@ -29,7 +29,7 @@ app.use('/contact', contactRouter)
 app.use('/employee',employeeRouter)
 app.use('/task', taskRouter)
 app.use('/sales',salesRouter)
-app.use("analytics", )
+app.use('/analytics', analyticsRouter )
 
 
 

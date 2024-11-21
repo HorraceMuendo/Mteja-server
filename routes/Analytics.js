@@ -3,25 +3,72 @@ const router = express.Router();
 const db = require('../db/dbConfig');
 
 
-router.get('/api/analytics', (req, res) => {
-    // Sample data: in a real-world app, you'd fetch this from a database
-    const analyticsData = {
-        customerBehavior: [
-            { month: 'January', visits: 120, signups: 15 },
-            { month: 'February', visits: 135, signups: 18 },
-            { month: 'March', visits: 200, signups: 22 },
-            // more data...
-        ],
-        salesTrends: [
-            { month: 'January', sales: 15000 },
-            { month: 'February', sales: 17000 },
-            { month: 'March', sales: 21000 },
-            // more data...
-        ],
-    };
+app.post('/add/track-visit', (req, res) => {
+    const { customer_details_id, pageUrl, visitType } = req.body;
+    const query = `
+        INSERT INTO visits (customer_details_id, page_url, visit_type) 
+        VALUES ($1, $2, $3) RETURNING *;
+    `;
+    const values = [customer_details_id, pageUrl, visitType];
     
-    res.json(analyticsData);
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error tracking visit:', err);
+            return res.status(500).json({ error: 'Failed to track visit.' });
+        }
+        res.status(201).json({ message: 'Visit tracked successfully', visit: result.rows[0] });
+    });
 });
+
+
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// router.get('/', (req, res) => {
+//     // Sample data: in a real-world app, you'd fetch this from a database
+//     const analyticsData = {
+//         customerBehavior: [
+//             { month: 'January', visits: 120, signups: 15 },
+//             { month: 'February', visits: 135, signups: 18 },
+//             { month: 'March', visits: 200, signups: 22 },
+//             // more data...
+//         ],
+//         salesTrends: [
+//             { month: 'January', sales: 15000 },
+//             { month: 'February', sales: 17000 },
+//             { month: 'March', sales: 21000 },
+//             // more data...
+//         ],
+//     };
+    
+//     res.json(analyticsData);
+// });
 /////////////////////////////////////////////////////////////////////////////////////
 // CREATE TABLE users (
 //     id SERIAL PRIMARY KEY,
@@ -113,4 +160,35 @@ router.get('/api/analytics', (req, res) => {
 // });
 
 
-module.exports = router;
+
+
+//////////////////////node mailer
+// const nodemailer = require('nodemailer');
+
+// // Create a transporter
+// let transporter = nodemailer.createTransport({
+//     service: 'Gmail', // You can use other services like 'Yahoo', 'Outlook', etc.
+//     auth: {
+//         user: 'your.email@gmail.com', // Your email address
+//         pass: 'yourpassword' // Your email password or app password
+//     }
+// });
+
+// // Define the email options
+// let mailOptions = {
+//     from: 'your.email@gmail.com', // Sender address
+//     to: 'recipient.email@example.com', // List of recipients
+//     subject: 'Hello from Nodemailer', // Subject line
+//     text: 'This is a test email sent from a Node.js application!', // Plain text body
+//     html: '<p>This is a <b>test email</b> sent from a <i>Node.js</i> application!</p>' // HTML body
+// };
+
+// // Send the email
+// transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//         return console.log(error);
+//     }
+//     console.log('Email sent: ' + info.response);
+// });
+
+
