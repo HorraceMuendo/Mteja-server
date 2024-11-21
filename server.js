@@ -7,6 +7,8 @@ const contactRouter = require ('./routes/contact')
 const employeeRouter = require ('./routes/employee')
 const taskRouter = require ('./routes/Task')
 const salesRouter = require ('./routes/Sales')
+const analyticsRouter = require ('./routes/Analytics')
+
 
 const app = express();
 const cors = require('cors');
@@ -27,6 +29,7 @@ app.use('/contact', contactRouter)
 app.use('/employee',employeeRouter)
 app.use('/task', taskRouter)
 app.use('/sales',salesRouter)
+app.use("analytics", )
 
 
 

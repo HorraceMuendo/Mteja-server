@@ -111,3 +111,6 @@ router.get('/api/analytics', (req, res) => {
 //         res.status(500).json({ error: 'Failed to fetch analytics data.' });
 //     }
 // });
+
+
+module.exports = router;
