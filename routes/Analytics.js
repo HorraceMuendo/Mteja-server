@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../db/dbConfig');
 
 
-app.post('/add/track-visit', (req, res) => {
+router.post('/add', (req, res) => {
     const { customer_details_id, pageUrl, visitType } = req.body;
     const query = `
         INSERT INTO visits (customer_details_id, page_url, visit_type) 
@@ -19,6 +19,45 @@ app.post('/add/track-visit', (req, res) => {
         res.status(201).json({ message: 'Visit tracked successfully', visit: result.rows[0] });
     });
 });
+
+router.get('/list', async (req, res) => {
+    try {
+        // Fetch the total visits and signups per month
+        const customerBehaviorQuery = `
+            SELECT 
+                TO_CHAR(visit_time, 'Month') AS month,
+                COUNT(*) FILTER (WHERE visit_type = 'page_view') AS visits,
+                COUNT(*) FILTER (WHERE visit_type = 'signup') AS signups
+            FROM visits
+            WHERE visit_time >= NOW() - INTERVAL '3 months'  -- Get last 3 months data
+            GROUP BY TO_CHAR(visit_time, 'Month')
+            ORDER BY TO_CHAR(visit_time, 'Month');
+        `;
+        
+        const salesTrendsQuery = `
+            SELECT 
+                TO_CHAR(visit_time, 'Month') AS month,
+                SUM(sale_amount) AS sales
+            FROM sales
+            WHERE visit_time >= NOW() - INTERVAL '3 months'
+            GROUP BY TO_CHAR(visit_time, 'Month')
+            ORDER BY TO_CHAR(visit_time, 'Month');
+        `;
+        
+        const customerBehavior = await db.query(customerBehaviorQuery);
+        const salesTrends = await db.query(salesTrendsQuery);
+        
+        res.json({
+            customerBehavior: customerBehavior.rows,
+            salesTrends: salesTrends.rows
+        });
+    } catch (err) {
+        console.error('Error fetching analytics data:', err);
+        res.status(500).json({ error: 'Failed to fetch analytics data.' });
+    }
+});
+
+
 
 
 
