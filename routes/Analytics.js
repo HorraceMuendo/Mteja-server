@@ -20,16 +20,53 @@ router.post('/add', (req, res) => {
     });
 });
 
+// router.get('/list', async (req, res) => {
+//     try {
+//         // Fetch the total visits and signups per month
+//         const customerBehaviorQuery = `
+//             SELECT 
+//                 TO_CHAR(visit_time, 'Month') AS month,
+//                 COUNT(*) FILTER (WHERE visit_type = 'page_view') AS visits,
+//                 COUNT(*) FILTER (WHERE visit_type = 'signup') AS signups
+//             FROM visits
+//             WHERE visit_time >= NOW() - INTERVAL '3 months'  -- Get last 3 months data
+//             GROUP BY TO_CHAR(visit_time, 'Month')
+//             ORDER BY TO_CHAR(visit_time, 'Month');
+//         `;
+        
+//         const salesTrendsQuery = `
+//             SELECT 
+//                 TO_CHAR(visit_time, 'Month') AS month,
+//                 SUM(sale_amount) AS sales
+//             FROM sales
+//             WHERE visit_time >= NOW() - INTERVAL '3 months'
+//             GROUP BY TO_CHAR(visit_time, 'Month')
+//             ORDER BY TO_CHAR(visit_time, 'Month');
+//         `;
+        
+//         const customerBehavior = await db.query(customerBehaviorQuery);
+//         const salesTrends = await db.query(salesTrendsQuery);
+        
+//         res.json({
+//             customerBehavior: customerBehavior.rows,
+//             salesTrends: salesTrends.rows
+//         });
+//     } catch (err) {
+//         console.error('Error fetching analytics data:', err);
+//         res.status(500).json({ error: 'Failed to fetch analytics data.' });
+//     }
+// });
+
+
 router.get('/list', async (req, res) => {
     try {
-        // Fetch the total visits and signups per month
         const customerBehaviorQuery = `
             SELECT 
                 TO_CHAR(visit_time, 'Month') AS month,
                 COUNT(*) FILTER (WHERE visit_type = 'page_view') AS visits,
                 COUNT(*) FILTER (WHERE visit_type = 'signup') AS signups
             FROM visits
-            WHERE visit_time >= NOW() - INTERVAL '3 months'  -- Get last 3 months data
+            WHERE visit_time >= NOW() - INTERVAL '3 months'
             GROUP BY TO_CHAR(visit_time, 'Month')
             ORDER BY TO_CHAR(visit_time, 'Month');
         `;
@@ -52,11 +89,10 @@ router.get('/list', async (req, res) => {
             salesTrends: salesTrends.rows
         });
     } catch (err) {
-        console.error('Error fetching analytics data:', err);
+        console.error('Error fetching analytics data:', err.message);
         res.status(500).json({ error: 'Failed to fetch analytics data.' });
     }
 });
-
 
 
 
@@ -202,32 +238,32 @@ module.exports = router;
 
 
 //////////////////////node mailer
-// const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-// // Create a transporter
-// let transporter = nodemailer.createTransport({
-//     service: 'Gmail', // You can use other services like 'Yahoo', 'Outlook', etc.
-//     auth: {
-//         user: 'your.email@gmail.com', // Your email address
-//         pass: 'yourpassword' // Your email password or app password
-//     }
-// });
+// Create a transporter
+let transporter = nodemailer.createTransport({
+    service: 'Gmail', // You can use other services like 'Yahoo', 'Outlook', etc.
+    auth: {
+        user: 'your.email@gmail.com', // Your email address
+        pass: 'yourpassword' // Your email password or app password
+    }
+});
 
-// // Define the email options
-// let mailOptions = {
-//     from: 'your.email@gmail.com', // Sender address
-//     to: 'recipient.email@example.com', // List of recipients
-//     subject: 'Hello from Nodemailer', // Subject line
-//     text: 'This is a test email sent from a Node.js application!', // Plain text body
-//     html: '<p>This is a <b>test email</b> sent from a <i>Node.js</i> application!</p>' // HTML body
-// };
+// Define the email options
+let mailOptions = {
+    from: 'your.email@gmail.com', // Sender address
+    to: 'recipient.email@example.com', // List of recipients
+    subject: 'Hello from Nodemailer', // Subject line
+    text: 'This is a test email sent from a Node.js application!', // Plain text body
+    html: '<p>This is a <b>test email</b> sent from a <i>Node.js</i> application!</p>' // HTML body
+};
 
-// // Send the email
-// transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//         return console.log(error);
-//     }
-//     console.log('Email sent: ' + info.response);
-// });
+// Send the email
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Email sent: ' + info.response);
+});
 
 
