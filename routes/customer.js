@@ -68,4 +68,33 @@ router.post('/compliments/add', (req, res) => {
 });
 
 
+router.get("/compliments/count", (req, res) => {
+    const sql = 'SELECT COUNT(*) AS count FROM compliment';  // SQL query to count rows in the "enquiries" table
+  
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log('Database error:', err);
+        return res.status(500).json({ error: 'Internal server error, please try again later' });
+      }
+      // Return the count from the result
+      res.json({ count: result.rows[0].count });
+    });
+  });
+
+ router.get("/complains/count", (req, res) => {
+    const sql = 'SELECT COUNT(*) AS count FROM complain';  // SQL query to count rows in the "enquiries" table
+  
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log('Database error:', err);
+        return res.status(500).json({ error: 'Internal server error, please try again later' });
+      }
+      // Return the count from the result
+      res.json({ count: result.rows[0].count });
+    });
+  });
+
+
+
+
 module.exports = router;

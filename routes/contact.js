@@ -32,4 +32,19 @@ router.post('/add', (req, res) => {
     });
 });
 
+router.get("/count", (req, res) => {
+    const sql = 'SELECT COUNT(*) AS count FROM contact';  // SQL query to count rows in the "enquiries" table
+  
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.log('Database error:', err);
+        return res.status(500).json({ error: 'Internal server error, please try again later' });
+      }
+      // Return the count from the result
+      res.json({ count: result.rows[0].count });
+    });
+  });
+  
+
+
 module.exports = router;

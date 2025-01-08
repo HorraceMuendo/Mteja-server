@@ -49,29 +49,22 @@ router.post("/leads", async (req, res) => {
 //   }
 // });
 
-// // Delete a lead
-// router.delete("/leads/:id", async (req, res) => {
-//   try {
-//     await Lead.findByIdAndDelete(req.params.id);
-//     res.status(204).send();
-//   } catch (error) {
-//     res.status(500).send("Error deleting lead");
-//   }
-// });
 
-// Sales Performance Metrics
-// router.get("/performance", async (req, res) => {
-//   try {
-//     const leads = await Lead.find();
-//     const totalLeads = leads.length;
-//     const closedWon = leads.filter((lead) => lead.status === "Closed Won").length;
-//     const winRate = (closedWon / totalLeads) * 100 || 0;
+router.delete('/delete/:id', (req, res) => {
+  const { id } = req.params;
 
-//     res.json({ totalLeads, closedWon, winRate });
-//   } catch (error) {
-//     res.status(500).send("Error fetching performance data");
-//   }
-// });
+  const sql = 'DELETE FROM leads WHERE id = $1';
+  const values = [id];
+
+  db.query(sql, values, (err, data) => {
+      if (err) {
+          console.error('Database error: ', err);
+          return res.status(500).json({ error: 'Internal server error. Please try again later.' });
+      }
+      res.status(204).send(); // No content to return on successful delete
+  });
+});
+
 
 
 
