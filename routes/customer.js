@@ -81,7 +81,7 @@ router.get("/compliments/count", (req, res) => {
     });
   });
 
- router.get("/complains/count", (req, res) => {
+  router.get("/complains/count", (req, res) => {
     const sql = 'SELECT COUNT(*) AS count FROM complain';  // SQL query to count rows in the "enquiries" table
   
     db.query(sql, (err, result) => {
